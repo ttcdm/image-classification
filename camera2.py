@@ -1,4 +1,3 @@
-###MOSTLY CHATGPT GENERATED###
 ###IF IT DOESN'T WORK ON ALL RACES, SAY SOMETHING ABOUT IT
 import cv2
 import numpy as np
@@ -9,8 +8,11 @@ from tensorflow import keras
 pygame.init()
 screeen = pygame.display.set_mode((48, 48))
 
-f = "model6.keras"
-class_names = ["anger", "disgust", "fear", "happy", "neutral", "sad", "surprise"]
+
+rel = 48
+
+f = "model8.keras"
+class_names = ["happy", "neutral", "sad"]
 def pred(img):
   imgarr = keras.utils.img_to_array(img)
   imgarr = np.expand_dims(imgarr, axis=0)
@@ -19,11 +21,10 @@ def pred(img):
   result = model.predict(images)[0]
   result = dict(zip(class_names, result))
   for i in result:
-    #print(i, result[i])
+    print(i, result[i])
     pass
   k = [result[i] for i in result]
   k, v = list(result.keys()), list(result.values())
-
   print(k[v.index(max(v))], max(v))
 
 
@@ -33,9 +34,9 @@ img = None
 
 while True:
     ret, frame=cap.read()
-    newframe = cv2.resize(frame, (128, 128))
+    newframe = cv2.resize(frame, (rel, rel))
     newframe = cv2.cvtColor(newframe, cv2.COLOR_BGR2GRAY)
-    cv2.imshow('frame', newframe)
+    cv2.imshow('frame', frame)
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
             print(event)
@@ -44,7 +45,7 @@ while True:
                 sys.exit()
                 exit()
             if event.key == pygame.K_a:
-                newframe=cv2.resize(frame, (128, 128))
+                newframe=cv2.resize(frame, (rel, rel))
                 newframe=cv2.cvtColor(newframe, cv2.COLOR_BGR2GRAY)
                 pred(newframe)
 
